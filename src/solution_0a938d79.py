@@ -13,6 +13,7 @@ def solve(json_data):
     training_data = json_data['train']
     testing_data = json_data['test']
     blobs = []
+    training_data = training_data + testing_data
     for item in training_data:
         input = item['input']
         output = item['output']
@@ -21,10 +22,8 @@ def solve(json_data):
         #     print(input[i])
         problem_type = get_problem_type(input)
         if problem_type == 0 or problem_type == 1:
-            print('problem type is col : ' + str(problem_type))
             problem_type_col = True
         else:
-            print('problem type is row one  : ' + str(problem_type))
             problem_type_col = False
 
         if problem_type_col:
@@ -41,10 +40,10 @@ def solve(json_data):
                 for i in range(len(input)):
                     output_pred[i][col] = value
                 value = second_value if value == first_value else first_value
-            print('----------Output----------')
+
             for i in range(len(output_pred)):
                 print(output_pred[i])
-            print('----------------------------')
+            print("")
         else:
             row_indexes = []
             tmp_tuple = (first_col, last_col) = [x[0] for x in input ], [x[len(x)-1] for x in input]
@@ -61,13 +60,11 @@ def solve(json_data):
                 value = second_value if value == first_value else first_value
             for i in range(len(output_pred)):
                 print(output_pred[i])
-            print('--------------------')
-
+            print("")
     return 0, json_data
 
 
 def calculate_offset(indexes):
-    print(indexes)
     first_index, first_value = indexes[0]
     second_index, second_value = indexes[1]
     return second_index - first_index, first_index, second_index, first_value, second_value
@@ -76,7 +73,6 @@ def main():
     file_loc = './../data/training/'
     file_name = str(sys.argv[1])
     file_path = file_loc + file_name
-    print(file_path)
     with open(file_path) as f:
         json_data = json.load(f)
     f.close()
@@ -86,8 +82,7 @@ def main():
     return_code, result = solve(json_data)
     if return_code is not 0:
         print('Somethign went wrong in task 1')
-    else:
-        print('Solve returned with success')
+    
 
 if __name__ == "__main__":
     main()

@@ -46,16 +46,16 @@ def solve(json_data):
     training_data = json_data['train']
     testing_data = json_data['test']
     blobs = []
+    for item in training_data:
+        input = item['input']
+        output = item['output']
+        blob = find_blobs(input)
+        blobs.append((input,blob))
     for item in testing_data:
         input = item['input']
         output = item['output']
         blob = find_blobs(input)
         blobs.append((input,blob))
-    # for item in testing_data:
-    #     input = item['input']
-    #     output = item['output']
-    #     blob = find_blobs(input)
-    #     blobs.append((input,blob))
     # print(blobs)
     # Now we have blobs for each input grid with num of color for each blob
     results = []
@@ -66,7 +66,7 @@ def solve(json_data):
             for i in range(n):
                 for j in range(w):
                     output[y+h+i][x+j] = 1
-            results.append({'input':input, 'output':output})
+        results.append({'input':input, 'output':output})
 
     for result in results:
         first_output = result['output']
@@ -79,7 +79,6 @@ def main():
     file_loc = './../data/training/'
     file_name = str(sys.argv[1])
     file_path = file_loc + file_name
-    print(file_path)
     with open(file_path) as f:
         json_data = json.load(f)
     f.close()
@@ -89,8 +88,6 @@ def main():
     return_code, result = solve(json_data)
     if return_code is not 0:
         print('Somethign went wrong in task 1')
-    else:
-        print('Solve returned with success')
 
 if __name__ == "__main__":
     main()
